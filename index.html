@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare Pro - AI-Powered Healthcare Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .chat-container { max-height: 400px; overflow-y: auto; }
+        .typing-indicator { animation: pulse 1.5s infinite; }
+        .floating-chatbot { 
+            position: fixed; 
+            bottom: 20px; 
+            right: 20px; 
+            z-index: 1000;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        .medicine-card:hover { transform: translateY(-5px); }
+        .report-drop-zone {
+            border: 2px dashed #cbd5e1;
+            transition: all 0.3s ease;
+        }
+        .report-drop-zone.dragover {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-heartbeat text-2xl text-blue-600"></i>
+                        <span class="ml-2 text-xl font-bold text-gray-800">MediCare Pro</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="text-gray-700 hover:text-blue-600 font-medium">Home</a>
+                    <a href="#services" class="text-gray-700 hover:text-blue-600 font-medium">Services</a>
+                    <a href="#store" class="text-gray-700 hover:text-blue-600 font-medium">Medicine Store</a>
+                    <a href="#appointments" class="text-gray-700 hover:text-blue-600 font-medium">Appointments</a>
+                    <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                        <i class="fas fa-user mr-2"></i>Login
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="gradient-bg pt-20 pb-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="text-white">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6">
+                        AI-Powered Healthcare at Your Fingertips
+                    </h1>
+                    <p class="text-xl mb-8 opacity-90">
+                        Upload medical reports, get instant AI analysis, consult with doctors via video call, and order medicines with free delivery.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button onclick="openChatbot()" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+                            <i class="fas fa-robot mr-2"></i>Start AI Chat
+                        </button>
+                        <button onclick="showBooking()" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition">
+                            <i class="fas fa-calendar mr-2"></i>Book Appointment
+                        </button>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <div class="bg-white rounded-2xl p-8 shadow-2xl">
+                        <i class="fas fa-stethoscope text-6xl text-blue-600 mb-4"></i>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">24/7 AI Assistant</h3>
+                        <p class="text-gray-600">Upload reports, get instant analysis, and receive immediate care recommendations</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Our Services</h2>
+                <p class="text-xl text-gray-600">Comprehensive healthcare solutions powered by AI</p>
+            </div>
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="text-center p-6 rounded-xl bg-blue-50 hover:bg-blue-100 transition">
+                    <i class="fas fa-file-medical text-4xl text-blue-600 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Report Analysis</h3>
+                    <p class="text-gray-600">AI-powered analysis of medical reports with instant insights</p>
+                </div>
+                <div class="text-center p-6 rounded-xl bg-green-50 hover:bg-green-100 transition">
+                    <i class="fas fa-video text-4xl text-green-600 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Video Consultation</h3>
+                    <p class="text-gray-600">Connect with doctors instantly for urgent medical needs</p>
+                </div>
+                <div class="text-center p-6 rounded-xl bg-purple-50 hover:bg-purple-100 transition">
+                    <i class="fas fa-pills text-4xl text-purple-600 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Medicine Store</h3>
+                    <p class="text-gray-600">Order medicines online with free home delivery</p>
+                </div>
+                <div class="text-center p-6 rounded-xl bg-orange-50 hover:bg-orange-100 transition">
+                    <i class="fas fa-calendar-check text-4xl text-orange-600 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Appointments</h3>
+                    <p class="text-gray-600">Book and manage appointments with healthcare providers</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Report Upload Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Upload Medical Reports</h2>
+                <p class="text-xl text-gray-600">Get instant AI analysis and recommendations</p>
+            </div>
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                <div id="dropZone" class="report-drop-zone rounded-xl p-12 text-center cursor-pointer">
+                    <i class="fas fa-cloud-upload-alt text-6xl text-gray-400 mb-4"></i>
+                    <h3 class="text-2xl font-semibold text-gray-700 mb-2">Drop your medical reports here</h3>
+                    <p class="text-gray-500 mb-4">Or click to browse files (PDF, JPG, PNG supported)</p>
+                    <input type="file" id="fileInput" class="hidden" accept=".pdf,.jpg,.jpeg,.png" multiple>
+                    <button onclick="document.getElementById('fileInput').click()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">
+                        <i class="fas fa-folder-open mr-2"></i>Choose Files
+                    </button>
+                </div>
+                <div id="uploadedFiles" class="mt-6 hidden">
+                    <h4 class="text-lg font-semibold mb-4">Uploaded Files:</h4>
+                    <div id="filesList" class="space-y-2"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Medicine Store Section -->
+    <section id="store" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-store text-blue-600 mr-3"></i>Medicine Store
+                </h2>
+                <p class="text-xl text-gray-600">Order medicines with FREE home delivery</p>
+                <div class="inline-flex items-center bg-green-100 text-green-800 px-4 py-2 rounded-full mt-4">
+                    <i class="fas fa-truck mr-2"></i>Free Delivery • Express Shipping Available
+                </div>
+            </div>
+            <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Medicine Cards -->
+                <div class="medicine-card bg-white rounded-xl shadow-lg p-6 border hover:shadow-xl transition-all duration-300">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-tablets text-4xl text-blue-600 mb-2"></i>
+                        <h4 class="font-semibold text-lg">Paracetamol</h4>
+                        <p class="text-gray-500 text-sm">Pain Relief</p>
+                    </div>
+                    <div class="text-center">
+                        <span class="text-2xl font-bold text-gray-800">$5.99</span>
+                        <button class="w-full mt-3 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+                            <i class="fas fa-cart-plus mr-2"></i>Add to Cart
+                        </button>
+                    </div>
+                </div>
+                <div class="medicine-card bg-white rounded-xl shadow-lg p-6 border hover:shadow-xl transition-all duration-300">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-pills text-4xl text-green-600 mb-2"></i>
+                        <h4 class="font-semibold text-lg">Vitamin D3</h4>
+                        <p class="text-gray-500 text-sm">Supplements</p>
+                    </div>
+                    <div class="text-center">
+                        <span class="text-2xl font-bold text-gray-800">$12.99</span>
+                        <button class="w-full mt-3 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+                            <i class="fas fa-cart-plus mr-2"></i>Add to Cart
+                        </button>
+                    </div>
+                </div>
+                <div class="medicine-card bg-white rounded-xl shadow-lg p-6 border hover:shadow-xl transition-all duration-300">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-capsules text-4xl text-purple-600 mb-2"></i>
+                        <h4 class="font-semibold text-lg">Antibiotics</h4>
+                        <p class="text-gray-500 text-sm">Prescription Required</p>
+                    </div>
+                    <div class="text-center">
+                        <span class="text-2xl font-bold text-gray-800">$24.99</span>
+                        <button class="w-full mt-3 bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition">
+                            <i class="fas fa-prescription mr-2"></i>Upload Prescription
+                        </button>
+                    </div>
+                </div>
+                <div class="medicine-card bg-white rounded-xl shadow-lg p-6 border hover:shadow-xl transition-all duration-300">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-heartbeat text-4xl text-red-600 mb-2"></i>
+                        <h4 class="font-semibold text-lg">BP Monitors</h4>
+                        <p class="text-gray-500 text-sm">Health Devices</p>
+                    </div>
+                    <div class="text-center">
+                        <span class="text-2xl font-bold text-gray-800">$89.99</span>
+                        <button class="w-full mt-3 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+                            <i class="fas fa-cart-plus mr-2"></i>Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Appointments Section -->
+    <section id="appointments" class="py-16 bg-gray-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Book Appointment</h2>
+                <p class="text-xl text-gray-600">Schedule consultation with our expert doctors</p>
+            </div>
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                <form id="appointmentForm" class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Patient Name</label>
+                        <input type="text" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your full name">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                        <input type="tel" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="+91 1234567890">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Preferred Date</label>
+                        <input type="date" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Preferred Time</label>
+                        <select class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option>Morning (9 AM - 12 PM)</option>
+                            <option>Afternoon (12 PM - 5 PM)</option>
+                            <option>Evening (5 PM - 8 PM)</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Reason for Visit</label>
+                        <textarea class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" rows="4" placeholder="Describe your symptoms or reason for consultation"></textarea>
+                    </div>
+                    <div class="md:col-span-2 flex gap-4">
+                        <button type="submit" class="flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition font-semibold">
+                            <i class="fas fa-calendar-check mr-2"></i>Book Appointment
+                        </button>
+                        <button type="button" onclick="startVideoCall()" class="flex-1 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition font-semibold">
+                            <i class="fas fa-video mr-2"></i>Urgent Video Call
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Floating Chatbot -->
+    <div class="floating-chatbot">
+        <button id="chatbotToggle" onclick="toggleChatbot()" class="bg-blue-600 text-white w-16 h-16 rounded-full shadow-2xl hover:bg-blue-700 transition-all duration-300">
+            <i class="fas fa-robot text-2xl"></i>
+        </button>
+    </div>
+
+    <!-- Chatbot Modal -->
+    <div id="chatbotModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md">
+                <!-- Chat Header -->
+                <div class="bg-blue-600 text-white p-4 rounded-t-2xl flex justify-between items-center">
+                    <div class="flex items-center">
+                        <i class="fas fa-robot text-2xl mr-3"></i>
+                        <div>
+                            <h3 class="font-semibold">AI Medical Assistant</h3>
+                            <p class="text-sm opacity-90">Online • Ready to help</p>
+                        </div>
+                    </div>
+                    <button onclick="closeChatbot()" class="text-white hover:text-gray-200">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <!-- Chat Messages -->
+                <div id="chatMessages" class="chat-container p-4 h-80 overflow-y-auto bg-gray-50">
+                    <div class="mb-4">
+                        <div class="bg-blue-600 text-white p-3 rounded-lg inline-block max-w-xs">
+                            <p class="text-sm">Hi! I'm your AI medical assistant. I can analyze your reports and provide instant health insights. How can I help you today?</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Chat Input -->
+                <div class="p-4 border-t">
+                    <div class="flex space-x-2">
+                        <input id="chatInput" type="text" placeholder="Type your message..." class="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <button onclick="sendMessage()" class="bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <div class="mt-2 flex space-x-2">
+                        <button onclick="quickMessage('I have symptoms')" class="text-xs bg-gray-200 text-gray-700 px-3 py-1 rounded-full hover:bg-gray-300">
+                            I have symptoms
+                        </button>
+                        <button onclick="quickMessage('Analyze my report')" class="text-xs bg-gray-200 text-gray-700 px-3 py-1 rounded-full hover:bg-gray-300">
+                            Analyze report
+                        </button>
+                        <button onclick="quickMessage('Emergency help')" class="text-xs bg-red-200 text-red-700 px-3 py-1 rounded-full hover:bg-red-300">
+                            Emergency
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Call Modal -->
+    <div id="videoCallModal" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-bold text-gray-800">
+                            <i class="fas fa-video text-green-600 mr-2"></i>Video Consultation
+                        </h3>
+                        <button onclick="endVideoCall()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">
+                            <i class="fas fa-phone-slash mr-2"></i>End Call
+                        </button>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-gray-900 rounded-xl aspect-video flex items-center justify-center">
+                            <div class="text-center text-white">
+                                <i class="fas fa-user-md text-6xl mb-4"></i>
+                                <p>Dr. Smith</p>
+                                <p class="text-sm opacity-75">Connecting...</p>
+                            </div>
+                        </div>
+                        <div class="bg-gray-800 rounded-xl aspect-video flex items-center justify-center">
+                            <div class="text-center text-white">
+                                <i class="fas fa-user text-6xl mb-4"></i>
+                                <p>You</p>
+                                <p class="text-sm opacity-75">Camera ready</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex justify-center space-x-4">
+                        <button class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition">
+                            <i class="fas fa-microphone-slash"></i>
+                        </button>
+                        <button class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition">
+                            <i class="fas fa-video-slash"></i>
+                        </button>
+                        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                            <i class="fas fa-share-screen"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
